@@ -1,0 +1,120 @@
+@font-face {
+    font-family: 'Monogram';
+    src: url('../assets/fonts/monogram.ttf')
+}
+
+:root {
+    --primary-color: #2aa4aa;
+}
+
+* {
+    font-family: 'Monogram', monospace;
+    font-size: 32px;
+    user-select: none;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    min-height: 100%;
+    margin: 0;
+    background-color: #2e2c3b;
+    color: white;
+}
+
+.title {
+    margin: 24px;
+    font-size: 64px;
+    text-shadow: 2px 2px var(--primary-color);
+}
+
+[fg-screen] {
+    position: relative;
+    width: 720px;
+    height: 576px;
+    border: solid 3px var(--primary-color);
+    background-image:
+        url('../assets/imgs/background-light.png'),
+        url('../assets/imgs/background-base.png');
+    background-position: top, bottom;
+    background-repeat: repeat-x, repeat-x;
+    overflow: hidden;
+}
+
+.buttons {
+    display: flex;
+}
+
+button {
+    width: 120px;
+    height: 60px;
+    margin: 20px;
+    border: solid 3px #61407a;
+    background-color: #2e2c3b;
+    color: white;
+    user-select: none;
+}
+
+.activeCanvas {
+    position: absolute;
+    display: flex;
+    width: 720px;
+    height: 480px;
+    overflow: hidden;
+}
+
+.score {
+    position: absolute;
+    right: 0;
+    margin: 24px;
+    font-size: 48px;
+    line-height: 50%;
+    text-shadow: 0 0 2px black;
+    z-index: 1;
+}
+
+.ghost {
+    position: absolute;
+    left: 256px;
+    width: 42px;
+    height: 42px;
+}
+
+.barrier {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.column.top.head {
+    width: 48px;
+    height: 12px;
+    background-image: url('../assets/imgs/column-head.png');
+    transform: scaleY(-1);
+}
+
+.column.bottom.head {
+    width: 48px;
+    height: 12px;
+    background-image: url('../assets/imgs/column-head.png');
+}
+
+.column.body {
+    flex-basis: 1px;
+    width: 36px;
+    background-image: url('../assets/imgs/column-body.png');
+}
+
+.game-over {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/imgs/game-over.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(0, 0, 0, .8);
+}
