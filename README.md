@@ -10,7 +10,7 @@
 
 ## :computer: Project
 
-Floaty Ghost is a "Flappy Bird"-esque game developed with pure JavaScript in order to practice DOM manipulation.
+Floaty Ghost is a "Flappy Bird"-esque game developed with pure JavaScript, without using the Canvas API, in order to practice DOM manipulation.
 
 Credit goes to both [Rotting Pixels](https://rottingpixels.itch.io/ "Rotting Pixels") and [Ansimuz](https://ansimuz.itch.io/ "Ansimuz") for the assets, and to [datagoblin](https://datagoblin.itch.io/ "datagoblin") for the font used in this project.
 
