@@ -102,8 +102,16 @@ class Ghost {
     }
 
     gravity() {
-        window.onkeydown = () => this.isFloating = true
-        window.onkeyup = () => this.isFloating = false
+        const pressEvents = ['keydown', 'mousedown', 'touchstart']
+        const releaseEvents = ['keyup', 'mouseup', 'touchend']
+        
+        pressEvents.forEach(event => {
+            window.addEventListener(event, () => this.isFloating = true)
+        })
+
+        releaseEvents.forEach(event => {
+            window.addEventListener(event, () => this.isFloating = false)
+        })
     }
 
     float() {
@@ -158,18 +166,19 @@ class Game {
         this.canvas = newElement('div', 'canvas')
         this.container.appendChild(this.canvas)
 
-        buttonNew.onclick = () => {
+        buttonNew.addEventListener('click', () => {
             this.setup()
-        }
+            buttonNew.blur()
+        })
 
         /* TODO: Hide disabled buttons */
-        buttonStart.onclick = () => {
+        buttonStart.addEventListener('click', () => {
             if (!this.isRunning && !this.isGameOver) this.start()
-        }
+        })
 
-        buttonPause.onclick = () => {
+        buttonPause.addEventListener('click', () => {
             if (this.isRunning && !this.isGameOver) this.pause()
-        }
+        })
     }
 
     setup() {

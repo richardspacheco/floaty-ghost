@@ -5,11 +5,16 @@
 
 :root {
     --primary-color: #2aa4aa;
+    --secondary-color: #61407a;
+    --ghost-position: 256px;
+    --screen-width: 720px;
+    --canvas-height: 480px;
 }
 
-* {
+html {
+    height: 100%;
     font-family: 'Monogram', monospace;
-    font-size: 32px;
+    color: white;
     user-select: none;
 }
 
@@ -17,23 +22,21 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
-    min-height: 100%;
+    height: 100%;
     margin: 0;
     background-color: #2e2c3b;
-    color: white;
 }
 
 .title {
-    margin: 24px;
-    font-size: 64px;
+    margin: 1.5rem 0;
+    font-size: 4rem;
     text-shadow: 2px 2px var(--primary-color);
 }
 
 [fg-screen] {
     position: relative;
-    width: 720px;
-    height: 576px;
+    width: var(--screen-width);
+    height: calc(var(--canvas-height) + 96px);
     border: solid 3px var(--primary-color);
     background-image:
         url('../assets/imgs/background-light.png'),
@@ -45,15 +48,27 @@ body {
 
 .buttons {
     display: flex;
+    justify-content: space-between;
+    width: calc(var(--screen-width) + 6px);
+    margin: 20px 0;
+}
+
+.buttons :first-child {
+    margin-right: auto;
+}
+
+.buttons :not(:first-child) {
+    margin-left: 20px;
 }
 
 button {
     width: 120px;
     height: 60px;
-    margin: 20px;
     border: solid 3px #61407a;
-    background-color: #2e2c3b;
-    color: white;
+    background-color: transparent;
+    font-family: inherit;
+    font-size: 2rem;
+    color: inherit;
     user-select: none;
 }
 
@@ -65,8 +80,8 @@ button:focus {
 .canvas {
     position: absolute;
     display: flex;
-    width: 720px;
-    height: 480px;
+    width: 100%;
+    height: var(--canvas-height);
     overflow: hidden;
 }
 
@@ -82,7 +97,7 @@ button:focus {
 
 .ghost {
     position: absolute;
-    left: 256px;
+    left: var(--ghost-position);
     width: 42px;
     height: 42px;
 }
@@ -119,4 +134,20 @@ button:focus {
     background-position: center;
     background-repeat: no-repeat;
     background-color: rgba(0, 0, 0, .8);
+}
+
+@media (max-width: 720px) {
+    :root {
+        --ghost-position: 64px;
+        --screen-width: 90%;
+        --canvas-height: calc(100% - 96px);
+    }
+
+    html {
+        font-size: 12px;
+    }
+
+    [fg-screen] {
+        background-size: auto var(--canvas-height), auto;
+    }
 }
