@@ -95,14 +95,7 @@ button:focus {
     height: 100%;
 }
 
-.column.top.head {
-    width: 48px;
-    height: 12px;
-    background-image: url('../assets/imgs/column-head.png');
-    transform: scaleY(-1);
-}
-
-.column.bottom.head {
+.column.head {
     width: 48px;
     height: 12px;
     background-image: url('../assets/imgs/column-head.png');
@@ -112,6 +105,10 @@ button:focus {
     flex-basis: 1px;
     width: 36px;
     background-image: url('../assets/imgs/column-body.png');
+}
+
+.column.top {
+    transform: scaleY(-1);
 }
 
 .game-over {
