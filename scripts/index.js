@@ -49,7 +49,7 @@ class Barrier {
     }
 
     active() {
-        let newPosition = this.getPosition() + this.positionIncrement
+        const newPosition = this.getPosition() + this.positionIncrement
         this.setPosition(newPosition)
 
         if (newPosition > this.game.activeCanvas.clientWidth) {
@@ -78,7 +78,7 @@ class Ghost {
 
         this.maxHeight = this.activeCanvas.clientHeight - this.element.clientHeight
 
-        let startingPosition = this.maxHeight / 2
+        const startingPosition = this.maxHeight / 2
         this.setPosition(startingPosition)
 
         this.isFloating = false
@@ -98,7 +98,7 @@ class Ghost {
     }
 
     float() {
-        let newPosition = this.getPosition() + (this.isFloating ? 7 : -10)
+        const newPosition = this.getPosition() + (this.isFloating ? 7 : -10)
 
         if (this.isFloating) {
             this.element.src = "assets/imgs/ghost_up.png"
@@ -127,8 +127,8 @@ class Scoreboard {
 
     scoreCheck(ghostObj, barrierObj) {
         if (!barrierObj.isScored) {
-            let rect1 = ghostObj.element.getBoundingClientRect()
-            let rect2 = barrierObj.element.getBoundingClientRect()
+            const rect1 = ghostObj.element.getBoundingClientRect()
+            const rect2 = barrierObj.element.getBoundingClientRect()
 
             if (rect1.x > rect2.x + rect2.width) {
                 barrierObj.isScored = true
@@ -183,7 +183,7 @@ class Game {
         this.isRunning = true
         this.gameAnimation = setInterval(() => {
             this.ghost.float()
-            let currentCollection = [...this.barrierCollection]
+            const currentCollection = [...this.barrierCollection]
             currentCollection.forEach(barrier => {
                 barrier.active()
                 this.gameScore.scoreCheck(this.ghost, barrier)
@@ -210,12 +210,12 @@ class Game {
 
     collisionCheck(ghostObj, barrierObj) {
         /* Collision detection is adapted from bounding box algorithm */
-        let rect1 = ghostObj.element.getBoundingClientRect()
-        let rect2 = barrierObj.element.getBoundingClientRect()
-        let rect3 = barrierObj.columnGap.getBoundingClientRect()
+        const rect1 = ghostObj.element.getBoundingClientRect()
+        const rect2 = barrierObj.element.getBoundingClientRect()
+        const rect3 = barrierObj.columnGap.getBoundingClientRect()
 
-        let atBarrier = rect1.x + rect1.width > rect2.x && rect1.x < rect2.x + rect2.width
-        let insideGap = rect1.y > rect3.y && rect1.y + rect1.height < rect3.y + rect3.height
+        const atBarrier = rect1.x + rect1.width > rect2.x && rect1.x < rect2.x + rect2.width
+        const insideGap = rect1.y > rect3.y && rect1.y + rect1.height < rect3.y + rect3.height
 
         return (atBarrier && !insideGap)
     }
