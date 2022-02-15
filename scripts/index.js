@@ -5,8 +5,8 @@ function newElement(tagName, className) {
 }
 
 class Barrier {
-    constructor(game) {
-        this.game = game
+    constructor(activeCanvas) {
+        this.activeCanvas = activeCanvas
 
         this.buildBarrier(/* gapSize */)
         this.positionIncrement = 10
@@ -15,7 +15,7 @@ class Barrier {
 
     buildBarrier(gapSize = 144) {
         this.element = newElement('div', 'barrier')
-        this.game.activeCanvas.appendChild(this.element)
+        this.activeCanvas.appendChild(this.element)
 
         this.columnTopHead = newElement('div', 'column top head')
         this.columnTopBody = newElement('div', 'column top body')
@@ -47,18 +47,35 @@ class Barrier {
     setPosition(newPosition) {
         this.element.style.right = `${newPosition}px`
     }
+}
 
-    active() {
-        const newPosition = this.getPosition() + this.positionIncrement
-        this.setPosition(newPosition)
+class Scenario {
+    constructor(activeCanvas) {
+        this.activeCanvas = activeCanvas
+        this.barriers = []
+        this.createBarrier()
+    }
 
-        if (newPosition > this.game.activeCanvas.clientWidth) {
-            this.element.parentNode.removeChild(this.element)
-            this.game.barrierCollection.shift()
+    createBarrier() {
+        const barrier = new Barrier(this.activeCanvas)
+        this.barriers.push(barrier)
+    }
+
+    removeBarrier(barrier) {
+        this.activeCanvas.removeChild(barrier.element)
+        this.barriers.shift()
+    }
+
+    shift(barrier) {
+        const newPosition = barrier.getPosition() + barrier.positionIncrement
+        barrier.setPosition(newPosition)
+
+        if (newPosition > this.activeCanvas.clientWidth) {
+            this.removeBarrier(barrier)
         }
 
-        if (30 === (newPosition - this.startingPosition) / this.positionIncrement) {
-            this.game.nextBarrier()
+        if (30 === (newPosition - barrier.startingPosition) / barrier.positionIncrement) {
+            this.createBarrier()
         }
     }
 }
@@ -169,12 +186,11 @@ class Game {
 
         this.pauseGame()
         this.isGameOver = false
-        this.barrierCollection = []
         this.activeCanvas.innerHTML = ""
 
         this.gameScore = new Scoreboard(this.activeCanvas)
         this.ghost = new Ghost(this.activeCanvas)
-        this.nextBarrier()
+        this.scenario = new Scenario(this.activeCanvas)
 
         this.startGame()
     }
@@ -183,9 +199,10 @@ class Game {
         this.isRunning = true
         this.gameAnimation = setInterval(() => {
             this.ghost.float()
-            const currentCollection = [...this.barrierCollection]
-            currentCollection.forEach(barrier => {
-                barrier.active()
+
+            const barriers = [...this.scenario.barriers]
+            barriers.forEach(barrier => {
+                this.scenario.shift(barrier)
                 this.gameScore.scoreCheck(this.ghost, barrier)
                 if (this.collisionCheck(this.ghost, barrier)) this.gameOver()
             })
@@ -202,10 +219,6 @@ class Game {
         this.isGameOver = true
         this.gameOverSplash = newElement('div', 'game-over')
         this.container.appendChild(this.gameOverSplash)
-    }
-
-    nextBarrier() {
-        this.barrierCollection.push(new Barrier(this))
     }
 
     collisionCheck(ghostObj, barrierObj) {
