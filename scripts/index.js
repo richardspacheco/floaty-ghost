@@ -196,8 +196,8 @@ class Game {
             const barriers = [...this.scenario.barriers]
             barriers.forEach(barrier => {
                 this.scenario.shift(barrier)
+                this.checkCollision(barrier)
                 this.checkScore(barrier)
-                if (this.collisionCheck(this.ghost, barrier)) this.gameOver()
             })
         }, 50)
     }
@@ -226,16 +226,17 @@ class Game {
         }
     }
 
-    collisionCheck(ghostObj, barrierObj) {
+    checkCollision(barrier) {
         /* Collision detection is adapted from bounding box algorithm */
-        const rect1 = ghostObj.element.getBoundingClientRect()
-        const rect2 = barrierObj.element.getBoundingClientRect()
-        const rect3 = barrierObj.columnGap.getBoundingClientRect()
+        const rect1 = this.ghost.element.getBoundingClientRect()
+        const rect2 = barrier.element.getBoundingClientRect()
+        const rect3 = barrier.columnGap.getBoundingClientRect()
 
         const atBarrier = rect1.x + rect1.width > rect2.x && rect1.x < rect2.x + rect2.width
         const insideGap = rect1.y > rect3.y && rect1.y + rect1.height < rect3.y + rect3.height
 
-        return (atBarrier && !insideGap)
+        this.hasCollided = atBarrier && !insideGap
+        if (this.hasCollided) this.gameOver()
     }
 }
 
