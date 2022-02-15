@@ -12,22 +12,22 @@ class Barrier {
         this.positionIncrement = 10
         this.isScored = false
     }
-    
+
     buildBarrier(gapSize = 144) {
         this.element = newElement('div', 'barrier')
         this.game.activeCanvas.appendChild(this.element)
-        
+
         this.columnTopHead = newElement('div', 'column top head')
         this.columnTopBody = newElement('div', 'column top body')
         this.columnGap = newElement('div', 'column gap')
         this.columnBottomHead = newElement('div', 'column bottom head')
         this.columnBottomBody = newElement('div', 'column bottom body')
-        
+
         this.columnGap.style.height = `${gapSize}px`
 
         /* TODO: Improve gap distribution */
         const random = Math.random()
-        this.columnTopBody.style.flexGrow = 0.2 + random 
+        this.columnTopBody.style.flexGrow = 0.2 + random
         this.columnBottomBody.style.flexGrow = 1.2 - random
 
         this.element.appendChild(this.columnTopBody)
@@ -46,17 +46,17 @@ class Barrier {
 
     setPosition(newPosition) {
         this.element.style.right = `${newPosition}px`
-    } 
+    }
 
     active() {
         let newPosition = this.getPosition() + this.positionIncrement
         this.setPosition(newPosition)
-    
+
         if (newPosition > this.game.activeCanvas.clientWidth) {
             this.element.parentNode.removeChild(this.element)
             this.game.barrierCollection.shift()
         }
-        
+
         if (30 === (newPosition - this.startingPosition) / this.positionIncrement) {
             this.game.nextBarrier()
         }
@@ -70,14 +70,14 @@ class Ghost {
         this.spawnGhost()
         this.gravity()
     }
-    
+
     spawnGhost() {
         this.element = newElement('img', 'ghost')
         this.element.src = "assets/imgs/ghost_mid.png"
         this.activeCanvas.appendChild(this.element)
-        
+
         this.maxHeight = this.activeCanvas.clientHeight - this.element.clientHeight
-        
+
         let startingPosition = this.maxHeight / 2
         this.setPosition(startingPosition)
 
@@ -129,7 +129,7 @@ class Scoreboard {
         if (!barrierObj.isScored) {
             let rect1 = ghostObj.element.getBoundingClientRect()
             let rect2 = barrierObj.element.getBoundingClientRect()
-    
+
             if (rect1.x > rect2.x + rect2.width) {
                 barrierObj.isScored = true
                 this.scorePush(++this.currentScore)
@@ -171,7 +171,7 @@ class Game {
         this.isGameOver = false
         this.barrierCollection = []
         this.activeCanvas.innerHTML = ""
-        
+
         this.gameScore = new Scoreboard(this.activeCanvas)
         this.ghost = new Ghost(this.activeCanvas)
         this.nextBarrier()
@@ -191,12 +191,12 @@ class Game {
             })
         }, 50)
     }
-    
+
     pauseGame() {
         this.isRunning = false
         clearInterval(this.gameAnimation)
     }
-    
+
     gameOver() {
         clearInterval(this.gameAnimation)
         this.isGameOver = true
