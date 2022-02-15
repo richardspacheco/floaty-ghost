@@ -139,23 +139,16 @@ class Scoreboard {
         this.activeCanvas.appendChild(this.scoreboard)
 
         this.currentScore = 0
-        this.scorePush(this.currentScore)
+        this.update()
     }
 
-    scoreCheck(ghostObj, barrierObj) {
-        if (!barrierObj.isScored) {
-            const rect1 = ghostObj.element.getBoundingClientRect()
-            const rect2 = barrierObj.element.getBoundingClientRect()
-
-            if (rect1.x > rect2.x + rect2.width) {
-                barrierObj.isScored = true
-                this.scorePush(++this.currentScore)
-            }
-        }
+    update() {
+        this.scoreboard.innerHTML = this.currentScore
     }
 
-    scorePush(score) {
-        this.scoreboard.innerHTML = score
+    increment() {
+        this.currentScore++
+        this.update()
     }
 }
 
@@ -188,7 +181,7 @@ class Game {
         this.isGameOver = false
         this.activeCanvas.innerHTML = ""
 
-        this.gameScore = new Scoreboard(this.activeCanvas)
+        this.score = new Scoreboard(this.activeCanvas)
         this.ghost = new Ghost(this.activeCanvas)
         this.scenario = new Scenario(this.activeCanvas)
 
@@ -203,7 +196,7 @@ class Game {
             const barriers = [...this.scenario.barriers]
             barriers.forEach(barrier => {
                 this.scenario.shift(barrier)
-                this.gameScore.scoreCheck(this.ghost, barrier)
+                this.checkScore(barrier)
                 if (this.collisionCheck(this.ghost, barrier)) this.gameOver()
             })
         }, 50)
@@ -219,6 +212,18 @@ class Game {
         this.isGameOver = true
         this.gameOverSplash = newElement('div', 'game-over')
         this.container.appendChild(this.gameOverSplash)
+    }
+
+    checkScore(barrier) {
+        if (barrier.isScored) return
+
+        const rect1 = this.ghost.element.getBoundingClientRect()
+        const rect2 = barrier.element.getBoundingClientRect()
+
+        if (rect1.x > rect2.x + rect2.width) {
+            barrier.isScored = true
+            this.score.increment()
+        }
     }
 
     collisionCheck(ghostObj, barrierObj) {
