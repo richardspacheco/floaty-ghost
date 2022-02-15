@@ -37,14 +37,14 @@ class Barrier {
         this.element.appendChild(this.columnBottomBody)
 
         this.startingPosition = - this.element.clientWidth
-        this.setPosition(this.startingPosition)
+        this.position = this.startingPosition
     }
 
-    getPosition() {
+    get position() {
         return parseInt(this.element.style.right.split('px')[0])
     }
 
-    setPosition(newPosition) {
+    set position(newPosition) {
         this.element.style.right = `${newPosition}px`
     }
 }
@@ -67,8 +67,8 @@ class Scenario {
     }
 
     shift(barrier) {
-        const newPosition = barrier.getPosition() + barrier.positionIncrement
-        barrier.setPosition(newPosition)
+        const newPosition = barrier.position + barrier.positionIncrement
+        barrier.position = newPosition
 
         if (newPosition > this.canvas.clientWidth) {
             this.removeBarrier(barrier)
@@ -96,7 +96,7 @@ class Ghost {
         this.maxHeight = this.canvas.clientHeight - this.element.clientHeight
 
         const startingPosition = this.maxHeight / 2
-        this.setPosition(startingPosition)
+        this.position = startingPosition
 
         this.isFloating = false
     }
@@ -106,28 +106,28 @@ class Ghost {
         window.onkeyup = () => this.isFloating = false
     }
 
-    getPosition() {
-        return parseInt(this.element.style.bottom.split('px')[0])
-    }
-
-    setPosition(newPosition) {
-        this.element.style.bottom = `${newPosition}px`
-    }
-
     float() {
-        const newPosition = this.getPosition() + (this.isFloating ? 7 : -10)
+        const newPosition = this.position + (this.isFloating ? 7 : -10)
 
         if (this.isFloating) {
             this.element.src = "assets/imgs/ghost_up.png"
         } else this.element.src = "assets/imgs/ghost_down.png"
 
         if (newPosition < 0) {
-            this.setPosition(0)
+            this.position = 0
         } else if (newPosition > this.maxHeight) {
-            this.setPosition(this.maxHeight)
+            this.position = this.maxHeight
         } else {
-            this.setPosition(newPosition)
+            this.position = newPosition
         }
+    }
+    
+    get position() {
+        return parseInt(this.element.style.bottom.split('px')[0])
+    }
+
+    set position(newPosition) {
+        this.element.style.bottom = `${newPosition}px`
     }
 }
 
