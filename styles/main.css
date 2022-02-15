@@ -57,6 +57,11 @@ button {
     user-select: none;
 }
 
+button:focus {
+    border: solid 3px var(--primary-color);
+    outline: none;
+}
+
 .activeCanvas {
     position: absolute;
     display: flex;
