@@ -143,27 +143,27 @@ class Scoreboard {
 }
 
 class Game {
-    constructor() {
-        this.container = document.querySelector('[fg-screen]')
+    constructor({ container, buttonNew, buttonStart, buttonPause }) {
+        this.container = container
         this.activeCanvas = newElement('div', 'activeCanvas')
         this.container.appendChild(this.activeCanvas)
 
-        document.querySelector('[fg-new]').onclick = () => {
+        buttonNew.onclick = () => {
             this.canvasSetup()
         }
 
         /* TODO: Hide disabled buttons */
-        document.querySelector('[fg-start]').onclick = () => {
+        buttonStart.onclick = () => {
             if (!this.isRunning && !this.isGameOver) this.startGame()
         }
 
-        document.querySelector('[fg-pause]').onclick = () => {
+        buttonPause.onclick = () => {
             if (this.isRunning && !this.isGameOver) this.pauseGame()
         }
     }
 
     canvasSetup() {
-        if (document.querySelector('.game-over')) {
+        if (this.container.contains(this.gameOverSplash)) {
             this.container.removeChild(this.gameOverSplash)
         }
 
@@ -221,4 +221,9 @@ class Game {
     }
 }
 
-window.onload = () => new Game()
+const container = document.querySelector('[fg-screen]')
+const buttonNew = document.querySelector('[fg-new]')
+const buttonStart = document.querySelector('[fg-start]')
+const buttonPause = document.querySelector('[fg-pause]')
+
+new Game({ container, buttonNew, buttonStart, buttonPause })
