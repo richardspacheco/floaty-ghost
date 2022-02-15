@@ -62,7 +62,7 @@ button:focus {
     outline: none;
 }
 
-.activeCanvas {
+.canvas {
     position: absolute;
     display: flex;
     width: 720px;

@@ -5,17 +5,17 @@ function newElement(tagName, className) {
 }
 
 class Barrier {
-    constructor(activeCanvas) {
-        this.activeCanvas = activeCanvas
+    constructor(canvas) {
+        this.canvas = canvas
 
-        this.buildBarrier(/* gapSize */)
+        this.build(/* gapSize */)
         this.positionIncrement = 10
         this.isScored = false
     }
 
-    buildBarrier(gapSize = 144) {
+    build(gapSize = 144) {
         this.element = newElement('div', 'barrier')
-        this.activeCanvas.appendChild(this.element)
+        this.canvas.appendChild(this.element)
 
         this.columnTopHead = newElement('div', 'column top head')
         this.columnTopBody = newElement('div', 'column top body')
@@ -50,19 +50,19 @@ class Barrier {
 }
 
 class Scenario {
-    constructor(activeCanvas) {
-        this.activeCanvas = activeCanvas
+    constructor(canvas) {
+        this.canvas = canvas
         this.barriers = []
         this.createBarrier()
     }
 
     createBarrier() {
-        const barrier = new Barrier(this.activeCanvas)
+        const barrier = new Barrier(this.canvas)
         this.barriers.push(barrier)
     }
 
     removeBarrier(barrier) {
-        this.activeCanvas.removeChild(barrier.element)
+        this.canvas.removeChild(barrier.element)
         this.barriers.shift()
     }
 
@@ -70,7 +70,7 @@ class Scenario {
         const newPosition = barrier.getPosition() + barrier.positionIncrement
         barrier.setPosition(newPosition)
 
-        if (newPosition > this.activeCanvas.clientWidth) {
+        if (newPosition > this.canvas.clientWidth) {
             this.removeBarrier(barrier)
         }
 
@@ -81,19 +81,19 @@ class Scenario {
 }
 
 class Ghost {
-    constructor(activeCanvas) {
-        this.activeCanvas = activeCanvas
+    constructor(canvas) {
+        this.canvas = canvas
 
-        this.spawnGhost()
+        this.spawn()
         this.gravity()
     }
 
-    spawnGhost() {
+    spawn() {
         this.element = newElement('img', 'ghost')
         this.element.src = "assets/imgs/ghost_mid.png"
-        this.activeCanvas.appendChild(this.element)
+        this.canvas.appendChild(this.element)
 
-        this.maxHeight = this.activeCanvas.clientHeight - this.element.clientHeight
+        this.maxHeight = this.canvas.clientHeight - this.element.clientHeight
 
         const startingPosition = this.maxHeight / 2
         this.setPosition(startingPosition)
@@ -132,11 +132,11 @@ class Ghost {
 }
 
 class Scoreboard {
-    constructor(activeCanvas) {
-        this.activeCanvas = activeCanvas
+    constructor(canvas) {
+        this.canvas = canvas
 
         this.scoreboard = newElement('div', 'score')
-        this.activeCanvas.appendChild(this.scoreboard)
+        this.canvas.appendChild(this.scoreboard)
 
         this.currentScore = 0
         this.update()
@@ -155,40 +155,40 @@ class Scoreboard {
 class Game {
     constructor({ container, buttonNew, buttonStart, buttonPause }) {
         this.container = container
-        this.activeCanvas = newElement('div', 'activeCanvas')
-        this.container.appendChild(this.activeCanvas)
+        this.canvas = newElement('div', 'canvas')
+        this.container.appendChild(this.canvas)
 
         buttonNew.onclick = () => {
-            this.canvasSetup()
+            this.setup()
         }
 
         /* TODO: Hide disabled buttons */
         buttonStart.onclick = () => {
-            if (!this.isRunning && !this.isGameOver) this.startGame()
+            if (!this.isRunning && !this.isGameOver) this.start()
         }
 
         buttonPause.onclick = () => {
-            if (this.isRunning && !this.isGameOver) this.pauseGame()
+            if (this.isRunning && !this.isGameOver) this.pause()
         }
     }
 
-    canvasSetup() {
+    setup() {
         if (this.container.contains(this.gameOverSplash)) {
             this.container.removeChild(this.gameOverSplash)
         }
 
-        this.pauseGame()
+        this.pause()
         this.isGameOver = false
-        this.activeCanvas.innerHTML = ""
+        this.canvas.innerHTML = ""
 
-        this.score = new Scoreboard(this.activeCanvas)
-        this.ghost = new Ghost(this.activeCanvas)
-        this.scenario = new Scenario(this.activeCanvas)
+        this.score = new Scoreboard(this.canvas)
+        this.ghost = new Ghost(this.canvas)
+        this.scenario = new Scenario(this.canvas)
 
-        this.startGame()
+        this.start()
     }
 
-    startGame() {
+    start() {
         this.isRunning = true
         this.gameAnimation = setInterval(() => {
             this.ghost.float()
@@ -202,7 +202,7 @@ class Game {
         }, 50)
     }
 
-    pauseGame() {
+    pause() {
         this.isRunning = false
         clearInterval(this.gameAnimation)
     }
